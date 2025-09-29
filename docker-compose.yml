@@ -1,0 +1,21 @@
+services:
+  sunshine:
+    build: .
+    container_name: sunshine-tailscale
+    privileged: true
+    runtime: nvidia
+    environment:
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - DISPLAY=:0
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+    volumes:
+      - ./sunshine-config:/home/vast/.config/sunshine
+      - /dev/shm:/dev/shm
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    ports:
+      - "22:22"                       # SSH
+      - "3389:3389"                   # RDP
+      - "47984-48010:47984-48010/tcp" # Sunshine TCP
+      - "47998-48010:47998-48010/udp" # Sunshine UDP
+    restart: unless-stopped
