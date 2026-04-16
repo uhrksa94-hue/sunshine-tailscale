@@ -2,9 +2,10 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Force use of US mirror to fix broken downloads
-RUN sed -i 's/archive.ubuntu.com/us.archive.ubuntu.com/g' /etc/apt/sources.list
-
+# Route downloads through Microsoft Azure's internal network
+RUN sed -i 's/archive.ubuntu.com/azure.archive.ubuntu.com/g' /etc/apt/sources.list && \
+    sed -i 's/security.ubuntu.com/azure.archive.ubuntu.com/g' /etc/apt/sources.list
+    
 # System Basics + Desktop
 RUN apt-get update && apt-get install -y \
     sudo wget curl git unzip nano \
